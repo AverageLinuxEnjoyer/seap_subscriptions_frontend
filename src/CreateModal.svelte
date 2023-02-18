@@ -2,27 +2,73 @@
     export let onCreate;
     export let idUser;
 
+    export let preset_subscription = null;
+
     let min_price = null;
     let max_price = null;
     let title_keywords = null;
     let desc_keywords = null;
     let additional_info_keywords = null;
 
+    let onChange = (preset_subscription) => {
+        if (preset_subscription !== null) {
+            min_price = preset_subscription.min_price;
+            max_price = preset_subscription.max_price;
+            title_keywords = preset_subscription.title_keywords;
+            desc_keywords = preset_subscription.desc_keywords;
+            additional_info_keywords =
+                preset_subscription.additional_info_keywords;
+        } else {
+            min_price = null;
+            max_price = null;
+            title_keywords = null;
+            desc_keywords = null;
+            additional_info_keywords = null;
+        }
+    };
+
+    $: onChange(preset_subscription);
+
     let sanitize_keywords = (keywords) => {
+        if (Array.isArray(keywords)) {
+            keywords = keywords.join(", ");
+        }
+
         if (keywords !== null) {
-            if (keywords === "") {
-                keywords = null;
-            } else {
-                keywords = keywords
-                    .split(",")
-                    .map((x) => x.trim())
-                    .filter((x) => x !== "");
-            }
+            keywords = keywords
+                .split(",")
+                .map((x) => x.trim())
+                .filter((x) => x !== "")
+                .filter((x) => x !== "null");
         }
         return keywords;
     };
 
-    let createSubscription = async () => {
+    let createSubscription = async (subscription) =>
+        await fetch(
+            "https://seap-subscription-api.shuttleapp.rs/subscriptions",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(subscription),
+            }
+        );
+
+    let updateSubscription = async (subscription) =>
+        await fetch(
+            `https://seap-subscription-api.shuttleapp.rs/subscriptions/${subscription.id}`,
+            {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(subscription),
+            }
+        );
+
+    let executeSubscription = async () => {
         title_keywords = sanitize_keywords(title_keywords);
         desc_keywords = sanitize_keywords(desc_keywords);
         additional_info_keywords = sanitize_keywords(additional_info_keywords);
@@ -37,16 +83,16 @@
             additional_info_keywords: additional_info_keywords,
         };
 
-        let response = await fetch(
-            "https://seap-subscription-api.shuttleapp.rs/subscriptions",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(subscription),
-            }
-        );
+        let response = null;
+
+        if (preset_subscription === null) {
+            response = await createSubscription(subscription);
+            console.log("Creating subscription...");
+        } else {
+            subscription.id = preset_subscription.id;
+            response = await updateSubscription(subscription);
+            console.log("Updating subscription...");
+        }
 
         let data = await response.json();
 
@@ -99,7 +145,8 @@
             <label
                 for="my-modal"
                 class="btn btn-primary"
-                on:click={createSubscription}>Create</label
+                on:click={executeSubscription}
+                >{preset_subscription === null ? "Create" : "Update"}</label
             >
         </div>
     </div>

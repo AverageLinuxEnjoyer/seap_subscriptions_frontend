@@ -34,6 +34,6 @@
   @tailwind utilities;
 
   :global(body) {
-    background: #2f3541;
+    background: #2c333f;
   }
 </style>

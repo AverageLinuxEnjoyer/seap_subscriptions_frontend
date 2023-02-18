@@ -10,6 +10,14 @@
     let checkboxes = [];
     let selected_subscriptions = [];
 
+    let preset_subscription = null;
+
+    $: if (selected_subscriptions.length === 1) {
+        preset_subscription = subscriptions[selected_subscriptions[0]];
+    } else {
+        preset_subscription = null;
+    }
+
     let update_table = async () => {
         const res = await fetch(
             `https://seap-subscription-api.shuttleapp.rs/subscriptions?email=${user.email}`,
@@ -18,6 +26,7 @@
             }
         );
         subscriptions = await res.json();
+        subscriptions.sort((a, b) => a.id - b.id);
         checkboxes = new Array(subscriptions.length).fill(false);
     };
 
@@ -53,16 +62,14 @@
     };
 </script>
 
-<div class="card w-auto bg-base-100 shadow-xl">
+<div class="card w-auto bg-base-100 shadow-xl my-8">
     <div class="card-actions justify-left">
-        <label for="my-modal" class="btn btn-primary">Create</label>
-        <button
-            class="btn btn-primary"
-            disabled={selected_subscriptions.length !== 1}>See more</button
+        <label for="my-modal" class="btn btn-primary"
+            >{preset_subscription === null ? "Create" : "Update"}</label
         >
         <button
             class="btn btn-primary"
-            disabled={selected_subscriptions.length !== 1}>Update</button
+            disabled={selected_subscriptions.length !== 1}>See more</button
         >
         <button
             class="btn btn-primary"
@@ -81,9 +88,16 @@
     />
 </div>
 
-<CreateModal onCreate={update_table} idUser={user.id} />
+<CreateModal
+    onCreate={update_table}
+    idUser={user.id}
+    bind:preset_subscription
+/>
 
 <style global lang="postcss">
+    body {
+        background-color: #f5f5f5;
+    }
     @tailwind base;
     @tailwind components;
     @tailwind utilities;
