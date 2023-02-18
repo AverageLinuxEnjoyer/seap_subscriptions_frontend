@@ -31,7 +31,7 @@
     }
 </script>
 
-<div class="card w-96 bg-base-100 shadow-xl">
+<div class="card w-96 bg-base-100 shadow-xl border-2 border-gray-700">
     <!-- use tailwind css to  -->
     <div class="card-body">
         <h2 class="card-title">What's your email?</h2>

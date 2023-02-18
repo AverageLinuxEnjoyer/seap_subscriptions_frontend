@@ -62,7 +62,7 @@
     };
 </script>
 
-<div class="card w-auto bg-base-100 shadow-xl my-8">
+<div class="card w-auto bg-base-100 shadow-xl my-8 border-2 border-gray-700">
     <div class="card-actions justify-left">
         <label for="my-modal" class="btn btn-primary"
             >{preset_subscription === null ? "Create" : "Update"}</label
@@ -79,7 +79,7 @@
         <button class="btn btn-primary" on:click={onBack}>Back</button>
     </div>
 </div>
-<div class="card w-auto bg-base-100 shadow-xl my-5">
+<div class="card w-auto bg-base-100 shadow-xl my-5 border-2 border-gray-700">
     <SubscriptionsTable
         page_size={5}
         bind:selected_subscriptions
