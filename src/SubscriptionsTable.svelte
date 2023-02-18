@@ -5,7 +5,6 @@
 
     export let page_size = 5;
     export let subscriptions;
-    export let selected_subscriptions;
     export let checkboxes;
 
     let page = 0;
