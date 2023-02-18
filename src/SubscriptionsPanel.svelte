@@ -95,9 +95,6 @@
 />
 
 <style global lang="postcss">
-    body {
-        background-color: #f5f5f5;
-    }
     @tailwind base;
     @tailwind components;
     @tailwind utilities;

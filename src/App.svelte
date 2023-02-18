@@ -34,6 +34,7 @@
   @tailwind utilities;
 
   :global(body) {
-    background: #2c333f;
+    background: linear-gradient(45deg, #2d3542 0%, #2f2d42 50%, #352d41 100%);
+    opacity: 0.8;
   }
 </style>
