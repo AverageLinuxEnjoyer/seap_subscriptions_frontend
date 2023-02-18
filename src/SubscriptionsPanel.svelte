@@ -64,7 +64,7 @@
 </script>
 
 <div
-    class="card w-auto bg-base-100 shadow-xl my-8 border-2 border-gray-700 flex-row justify-between"
+    class="card w-auto bg-base-100 shadow-xl my-8 border-2 border-gray-700 flex-row justify-between gap-2"
 >
     <div class="card-actions justify-left">
         <label for="my-modal" class="btn btn-primary"
@@ -91,63 +91,69 @@
     </div>
 </div>
 <div class="card w-auto bg-base-100 shadow-xl my-5 border-2 border-gray-700">
-    <SubscriptionsTable
-        page_size={5}
-        subscriptions={subscriptions.filter((subscription) => {
-            if (
-                subscription.title_keywords !== null &&
-                subscription.title_keywords
-                    .join(",")
-                    .toLowerCase()
-                    .includes(search.toLowerCase())
-            ) {
-                return true;
-            }
+    {#if subscriptions.length === 0}
+        <div class="card-body">
+            <h2 class="card-title">No subscriptions.</h2>
+        </div>
+    {:else}
+        <SubscriptionsTable
+            page_size={5}
+            subscriptions={subscriptions.filter((subscription) => {
+                if (
+                    subscription.title_keywords !== null &&
+                    subscription.title_keywords
+                        .join(",")
+                        .toLowerCase()
+                        .includes(search.toLowerCase())
+                ) {
+                    return true;
+                }
 
-            if (
-                subscription.desc_keywords !== null &&
-                subscription.desc_keywords
-                    .join(",")
-                    .toLowerCase()
-                    .includes(search.toLowerCase())
-            ) {
-                return true;
-            }
+                if (
+                    subscription.desc_keywords !== null &&
+                    subscription.desc_keywords
+                        .join(",")
+                        .toLowerCase()
+                        .includes(search.toLowerCase())
+                ) {
+                    return true;
+                }
 
-            if (
-                subscription.additional_info_keywords !== null &&
-                subscription.additional_info_keywords
-                    .join(",")
-                    .toLowerCase()
-                    .includes(search.toLowerCase())
-            ) {
-                return true;
-            }
+                if (
+                    subscription.additional_info_keywords !== null &&
+                    subscription.additional_info_keywords
+                        .join(",")
+                        .toLowerCase()
+                        .includes(search.toLowerCase())
+                ) {
+                    return true;
+                }
 
-            if (
-                subscription.min_price !== null &&
-                subscription.min_price
-                    .toString()
-                    .toLowerCase()
-                    .includes(search.toLowerCase())
-            ) {
-                return true;
-            }
+                if (
+                    subscription.min_price !== null &&
+                    subscription.min_price
+                        .toString()
+                        .toLowerCase()
+                        .includes(search.toLowerCase())
+                ) {
+                    return true;
+                }
 
-            if (
-                subscription.max_price !== null &&
-                subscription.max_price
-                    .toString()
-                    .toLowerCase()
-                    .includes(search.toLowerCase())
-            ) {
-                return true;
-            }
+                if (
+                    subscription.max_price !== null &&
+                    subscription.max_price
+                        .toString()
+                        .toLowerCase()
+                        .includes(search.toLowerCase())
+                ) {
+                    return true;
+                }
 
-            return false;
-        })}
-        bind:checkboxes
-    />
+                return false;
+            })}
+            bind:checkboxes
+        />
+    {/if}
 </div>
 
 <CreateModal
