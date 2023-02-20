@@ -19,9 +19,6 @@
   };
 </script>
 
-<!-- <LoginPanel bind:user />
-<SubscriptionsPanel /> -->
-
 {#if page === 0}
   <LoginPanel bind:user {onUserChange} />
 {:else if page === 1}
